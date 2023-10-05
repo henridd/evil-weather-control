@@ -5,10 +5,9 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_NAME: tfewc-function
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: EvilWeatherControlApp\published
   CONFIGURATION: Release
-  DOTNET_VERSION: 6.0.x
-  WORKING_DIRECTORY: EvilWeatherControlApp
+  DOTNET_VERSION: 7.0.x
+  WORKING_DIRECTORY: NewEvilWeatherControlApp
   TESTING_DIRECTORY: EvilWeatherControlApp.Tests
 
 jobs:
@@ -63,11 +62,11 @@ jobs:
       run: dotnet test "${{ env.TESTING_DIRECTORY }}" --verbosity normal
       
     - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output ./output
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
       id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        package: output
